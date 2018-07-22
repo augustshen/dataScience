@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1532001984233.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2101501093",
+    "id" : "54E98BDC",
+    "lastKnownWriteTime" : 1532006412,
+    "last_content_update" : 1532006412330,
+    "path" : "E:/study/lessons/HarvardX Data Science/5 Productivity tools/Section0.R",
+    "project_path" : "Section0.R",
+    "properties" : {
+        "cursorPosition" : "9,0",
+        "scrollLine" : "0",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

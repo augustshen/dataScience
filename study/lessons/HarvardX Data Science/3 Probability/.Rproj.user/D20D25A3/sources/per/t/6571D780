@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1530501064085.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "846515479",
+    "id" : "6571D780",
+    "lastKnownWriteTime" : 1530512012,
+    "last_content_update" : 1530512011242,
+    "path" : "D:/study/lessons/HarvardX Data Science/3 Probability/Section4-BigShort.R",
+    "project_path" : "Section4-BigShort.R",
+    "properties" : {
+        "cursorPosition" : "189,25",
+        "scrollLine" : "174"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

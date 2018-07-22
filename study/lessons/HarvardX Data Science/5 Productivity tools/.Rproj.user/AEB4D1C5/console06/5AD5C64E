@@ -1,0 +1,55 @@
+[0m[0K]0;:/e/study/lessons/HarvardX Data Science/5 Productivity tools[?25l
+[0;32mAdministrator@YH--20140628DVQ [0;35m [0;33m/e/study/lessons/HarvardX Data Science/5 Productivity tools[0m[0K
+$[0K[3G[?25h[?25l$ g[0K[?25hi[0Kt[0K[7G[?25l$ git c[0K[?25ho[0Kn[0Kf[0Ki[0Kg[0K[?25l
+[0K[?25husage: git config [<options>][0K[?25l
+[0K
+Config file location[0K
+    --global              use global config file[0K
+    --system              use system config file[0K
+    --local               use repository config file[0K
+    -f, --file <file>     use given config file[0K
+    --blob <blob-id>      read config from given blob object[0K
+[0K
+Action[0K
+    --get                 get value: name [value-regex][0K
+    --get-all             get all values: key [value-regex][0K
+    --get-regexp          get values for regexp: name-regex [value-regex][0K
+    --get-urlmatch        get value specific for the URL: section[.var] URL[0K
+    --replace-all         replace all matching variables: name value [value_regex][0K
+    --add                 add a new variable: name value[0K
+    --unset               remove a variable: name [value-regex][0K
+    --unset-all           remove all matches: name [value-regex][0K
+    --rename-section      rename section: old-name new-name[0K
+    --remove-section      remove a section: name[0K
+    -l, --list            list all[0K
+    -e, --edit            open an editor[0K
+    --get-color           find the color configured: slot [default][0K
+    --get-colorbool       find the color setting: slot [stdout-is-tty][0K
+[0K
+Type[0K
+    --bool                value is "true" or "false"[0K
+    --int                 value is decimal number[0K
+    --bool-or-int         value is --bool or --int[0K
+    --path                value is a path (file or directory name)[0K
+    --expiry-date         value is an expiry date[0K
+[0K
+Other[0K
+    -z, --null            terminate values with NUL byte[0K
+    --name-only           show variable names only[0K
+    --includes            respect include directives on lookup[0K
+    --show-origin         show origin of config (file, standard input, blob, command line)[0K
+[0K
+[0K[?25h[?25l
+[0;32mAdministrator@YH--20140628DVQ [0;35m [0;33m/e/study/lessons/HarvardX Data Science/5 Productivity tools[0m[0K
+$[0K[3G[?25h[?25l[0K[3G[?25h[?25l$[0K
+[0K[?25h[?25l
+[0;32mAdministrator@YH--20140628DVQ [0;35m [0;33m/e/study/lessons/HarvardX Data Science/5 Productivity tools[0m[0K
+$[0K[3G[?25h[?25l$ g[0K[?25hi[0Kt[0K[7G[?25l$ git c[0K[?25ho[0Kn[0Kf[0Ki[0Kg[0K[14G[?25l$ git config -[0K[?25h-[0Kg[0Kl[0Ko[0K[?25lb[0K[19G[?25h[20G[?25l$ git config --globa[0K[?25hl[0K[23G[?25l$ git config --global u[0K[?25hs[0Ke[0Kr[0K.[0Kn[0Ka[0Km[0Ke[0K[33G[?25l$ git config --global user.name "[0K[?25hg[0Ku[0K[?25l$ git config --global user.name "g[0K[?25h[?25l$ git config --global user.name "[0K[?25ha[0Ku[0Kg[0Ku[0K[?25ls[0K[38G[?25h[39G[?25l$ git config --global user.name "august[0K[39G[?25h[40G[?25l$ git config --global user.name "augusts[0K[?25hh[0Ke[0Kn[0K"[0K[?25l
+[0K[?25h[?25l
+[0;32mAdministrator@YH--20140628DVQ [0;35m [0;33m/e/study/lessons/HarvardX Data Science/5 Productivity tools[0m[0K
+$[0K[2A[?25h[?25l
+
+[3G[?25h[?25l$ g[0K[?25hi[0Kt[0K[7G[?25l$ git c[0K[?25ho[0Kn[0Kf[0Ki[0Kg[0K[14G[?25l$ git config -[0K[?25h-[0Kg[0Kl[0Ko[0Kb[0Ka[0Kl[0K[23G[?25l$ git config --global u[0K[?25hs[0Ke[0Kr[0K.[0Km[0Ka[0Ki[0Kl[0K[33G[?25l$ git config --global user.mail "[0K[?25hd[0Ka[0Kr[0Kg[0Kr[0Ke[0Ky[0K@[0Kh[0Ko[0Kt[0Km[0Ka[0Ki[0Kl[0K[?25l.[0K[49G[?25h[50G[?25l$ git config --global user.mail "dargrey@hotmail.c[0K[?25ho[0Km[0K"[0K[?25l
+[0K[?25h[?25l
+[0;32mAdministrator@YH--20140628DVQ [0;35m [0;33m/e/study/lessons/HarvardX Data Science/5 Productivity tools[0m[0K
+$[0K[3G[?25h

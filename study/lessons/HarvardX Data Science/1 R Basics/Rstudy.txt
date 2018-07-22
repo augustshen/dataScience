@@ -1,0 +1,88 @@
+internal functions, log log2 log10 sqrt exp
+
+library(dslabs)
+data(murders)
+
+str(murders)   describe the detail infos
+names(murders)  display column names
+class(murders)  display the type of object
+identical(o, q)  check if it's same object
+murders[["population"]] == murders$population
+levels(murders$region)   The function levels shows us the categories for the factor.
+table(murders$region)   The function table takes a vector as input and returns the frequency of each unique element in the vector.
+    Northeast         South North Central          West 
+            9            17            12            13
+			
+c()   create a vector
+
+cost <- c(50, 75, 90, 100, 150)
+food <- c("pizza", "burgers", "salads", "cheese", "pasta")
+names(cost) <- food
+
+names()  add names for vector, if add twice, the first one will be replaced
+
+seq(begin, end, step) step can be num or like this length.out = 100
+
+x <- as.numeric(x)   convert x to numeric
+as.character(x)   convert x to character
+
+sort  			sort a vector              sort(c(4, 8, 72, 1, 5))   returns  1, 4, 5, 8, 72
+order           x[order{x}] == sort        order(c(4, 8, 72, 1, 5))   return 4, 1, 5, 2, 3
+rank            return each element rank   rank(c(4, 8, 72, 1, 5))   return 2, 4, 5, 1, 3
+
+which.min(murders$total)   return the position
+
+data.frame(name = states, rank = ranks)   create new data frame
+
+mean(na_example)   calculate the avg
+ind <- is.na(na_example)   check if the value is NA
+
+temp <- (temp - 32) * 5 / 9    calculate base on vector
+
+low <- murder_rate < 1   return a vector of boolean
+which(low)			return the True positions
+
+sum(murder_rate < mean(murder_rate))
+
+abbs <- c("AK", "MI", "IA")
+ind <- match(abbs, murders$abb)
+
+abbs <- c("MA", "ME", "MI", "MO", "MU")
+abbs %in% murders$abb
+
+murders <- mutate(murders, rate=total/population * 100000)   mutate() add new column to a table(data frame)
+
+select(murders, state, abb)     select() columns from table 
+
+filter(murders, rank < 6)   filter() select by rows
+
+# Use nrow() to calculate the number of rows
+nrow(no_south)
+
+The pipe %>% permits us to perform both operation sequentially and without having to define an intermediate variable 
+murders %>% filter(region %in% c("Northeast", "West"), rate < 1) %>% select(state, rate, rank)
+
+library(dplyr)
+
+plot(population_in_millions, total_gun_murders)   plot(x, y) draw functions
+
+直方图表示被存储到范围中的变量的值的频率。 直方图类似于条形图，但不同之处在于将值分组为连续范围。 直方图中的每个柱表示该范围中存在的值的数量的高度。
+R语言使用hist()函数创建直方图。 此函数使用向量作为输入，并使用一些更多的参数来绘制直方图。
+hist(v)    直方图，按范围统计数据出现次数
+
+箱线图是数据集中的数据分布良好的度量。 它将数据集分成三个四分位数。 此图表表示数据集中的最小值，最大值，中值，第一四分位数和第三四分位数。 它还可用于通过绘制每个数据集的箱线图来比较数据集之间的数据分布。
+R语言中使用boxplot()函数来创建箱线图。boxplot(population~region, data=murders)
+
+all(v)
+any(v)
+head()
+tail()
+ifelse(exp, if true, if false)
+
+define function sample
+sum_n <- function(n) {
+  v <- (1:n)
+  sum(v)
+}
+
+s_n <- vector("numeric", 25)  create empty v with specified length

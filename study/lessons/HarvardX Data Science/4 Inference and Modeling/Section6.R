@@ -1,0 +1,337 @@
+# Election Forecasting
+# d~N(miu, tau) describes our best guess had we not seen any polling data
+# X_hat|d~N(d, sigma) describes randomness due to sampling and the pollster effect
+mu <- 0
+tau <- 0.035
+sigma <- results$se
+Y <- results$avg
+B <- sigma^2 / (sigma^2 + tau^2)
+
+posterior_mean <- B * mu + (1 - B) * Y
+posterior_se <- sqrt(1/(1/sigma^2 + 1/tau^2))
+
+posterior_mean
+posterior_se
+
+posterior_mean + c(-1.96, 1.96) * posterior_se
+
+# 6.2 Mathematical Representations of Models
+J <- 6
+N <- 2000
+d <- 0.021
+p <- (d + 1) / 2
+X <- d + rnorm(J, 0, 2 * sqrt(p * (1 - p) / N))
+
+I <- 5
+J <- 6
+N <- 2000
+X <- sapply(1:I, function(i) {
+  d + rnorm(J, 0, 2 * sqrt(p * (1 - p) / N))
+})
+
+# h is the difference of the pollers
+I <- 5
+J <- 6
+N <- 2000
+d <- 0.021
+p <- (d + 1) / 2
+h <- rnorm(I, 0, 0.025)
+X <- sapply(1:I, function(i) {
+  d + h[i] + rnorm(J, 0, 2 * sqrt(p * (1 - p) / N))
+})
+
+mu <- 0
+tau <- 0.035
+sigma <- sqrt(results$se^2 + 0.025^2)
+Y <- results$avg
+B <- sigma^2 / (sigma^2 + tau ^2)
+
+posterior_mean <- B * mu + (1 - B) * Y
+posterior_se <- sqrt(1/(1/sigma^2 + 1/tau^2))
+
+1 - pnorm(0, posterior_mean, posterior_se)
+
+# 6.3 Predicting the Electoral College
+library(tidyverse)
+results_us_election_2016 %>% arrange(desc(electoral_votes)) %>% top_n(5, electoral_votes)
+
+results <- polls_us_election_2016 %>%
+  filter(state != "U.S." & !grepl("CD", state) &
+           enddate >= "2016-10-31" &
+           (grade %in% c("A+", "A", "A-", "B+") | is.na(grade))) %>%
+  mutate(spread= rawpoll_clinton/100 - rawpoll_trump/100) %>%
+  group_by(state) %>%
+  summarize(avg = mean(spread), sd = sd(spread), n = n()) %>%
+  mutate(state = as.character(state))
+results %>% arrange(abs(avg))
+results <- left_join(results, results_us_election_2016, by = "state")
+
+results_us_election_2016 %>% filter(!state %in% results$state)
+
+results <- results %>% mutate(sd = ifelse(is.na(sd), median(results$sd, na.rm = TRUE), sd))
+
+mu <- 0
+tau <- 0.02
+results %>% mutate(sigma = sd/sqrt(n), 
+                   B = sigma^2 / (sd^2 + tau^2),
+                   posterior_mean = B * mu + (1 - B) * avg,
+                   posterior_se = sqrt(1/(1/sigma^2 + 1/tau^2))) %>%
+  arrange((abs(posterior_mean)))
+
+mu <- 0
+tau <- 0.02
+clinton_EV <- replicate(1000, {
+  results %>% mutate(sigma = sd / sqrt(n),
+                     B = sigma^2/(sigma^2 + tau^2),
+                     posterior_mean = B * mu + (1 - B)*avg,
+                     posterior_se = sqrt(1/(1/sigma^2 + 1/tau^2)),
+                     simulated_result = rnorm(length(posterior_mean), posterior_mean, posterior_se),
+                     clinton = ifelse(simulated_result>0, electoral_votes, 0)) %>%
+    summarize(clinton = sum(clinton)) %>%
+    .$clinton + 7## 7 for Rhode Island and D.C.
+})
+mean(clinton_EV>269)
+
+data.frame(clinton_EV) %>%
+  ggplot(aes(clinton_EV)) +
+  geom_histogram(binwidth = 1) +
+  geom_vline(xintercept = 269)
+
+data.frame(clinton_EV) %>%
+  ggplot(aes(clinton_EV)) + 
+  geom_histogram(binwidth = 1) + 
+  geom_vline(xintercept = 269)
+# above did not consider the bians 
+
+tau <- 0.02
+bias_sd <- 0.03
+clinton_EV_2 <- replicate(1000, {
+  results %>% mutate(sigma = sqrt(sd^2/n + bias_sd^2),
+                     B = sigma^2/(sigma^2 + tau^2),
+                     posterior_mean = B * mu + (1 - B) * avg,
+                     posterior_se = sqrt(1/(1/sigma^2 + 1/tau^2)),
+                     simulated_result = rnorm(length(posterior_mean), posterior_mean, posterior_se),
+                     clinton = ifelse(simulated_result>0, electoral_votes, 0)) %>%
+    summarize(clinton = sum(clinton) + 7) %>% .$clinton ## 7 for Rhode Island and D.C.
+})
+data.frame(clinton_EV_2) %>%
+  ggplot(aes(clinton_EV_2)) + 
+  geom_histogram(binwidth = 1) + 
+  geom_vline(xintercept = 269)
+
+# 6.4 Forecasting
+one_pollster <- polls_us_election_2016 %>%
+  filter(pollster == "Ipsos" & state == "U.S.") %>%
+  mutate(spread = rawpoll_clinton / 100 - rawpoll_trump/100)
+se <- one_pollster %>% 
+  summarize(empirical = sd(spread),
+            theoretical = 2 * sqrt(mean(spread) * (1 - mean(spread))/min(samplesize)))
+se
+
+one_pollster %>% ggplot(aes(spread)) +
+  geom_histogram(binwidth = 0.01, color = "black")
+
+polls_us_election_2016 %>%
+  filter(state == "U.S." & enddate >= "2016-07-01") %>%
+  group_by(pollster) %>%
+  filter(n() >= 10) %>%
+  ungroup() %>%
+  mutate(spread = rawpoll_clinton / 100 - rawpoll_trump / 100) %>%
+  ggplot(aes(enddate, spread)) + geom_smooth(method = "loess", span = 0.1) +
+  geom_point(aes(color=pollster), show.legend = FALSE, alpha = 0.6)
+
+# consider the time of trend f(t)
+polls_us_election_2016 %>%
+  filter(state == "U.S." & enddate >= "2016-07-01") %>%
+  select(enddate, pollster, rawpoll_clinton, rawpoll_trump) %>%
+  rename(Clinton = rawpoll_clinton, Trump = rawpoll_trump) %>%
+  gather(candidate, percentage, -enddate, -pollster) %>%
+  mutate(candidate = factor(candidate, levels = c("Trump", "Clinton"))) %>%
+  group_by(pollster) %>%
+  filter(n()>=10) %>%
+  ungroup() %>%
+  ggplot(aes(enddate, percentage, color = candidate)) +
+  geom_point(show.legend = FALSE, alpha = 0.4) +
+  geom_smooth(method = "loess", span = 0.15) + 
+  scale_y_continuous(limits = c(30, 50))
+
+names(polls_us_election_2016)
+
+# exercises module 1
+# ex1 
+# Load the libraries and data
+library(dplyr)
+library(dslabs)
+data("polls_us_election_2016")
+
+# Create a table called `polls` that filters by  state, date, and reports the spread
+polls <- polls_us_election_2016 %>% 
+  filter(state != "U.S." & enddate >= "2016-10-31") %>% 
+  mutate(spread = rawpoll_clinton/100 - rawpoll_trump/100)
+
+# Create an object called `cis` that columns for the lower and upper confidence intervals. Select the columns indicated in the instructions.
+cis <- polls %>% mutate(X_hat = (spread+1)/2, se = 2*sqrt(X_hat*(1-X_hat)/samplesize), 
+                        lower = spread - qnorm(0.975)*se, upper = spread + qnorm(0.975)*se) %>%
+  select(state, startdate, enddate, pollster, grade, spread, lower, upper)
+
+# ex2
+# Add the actual results to the `cis` data set
+add <- results_us_election_2016 %>% mutate(actual_spread = clinton/100 - trump/100) %>% select(state, actual_spread)
+cis <- cis %>% mutate(state = as.character(state)) %>% left_join(add, by = "state")
+names(add)
+add
+names(cis)
+# Create an object called `p_hits` that summarizes the proportion of confidence intervals that contain the actual value. Print this object to the console.
+p_hits <- cis %>% mutate(hit = (actual_spread >= lower & actual_spread <= upper)) %>% summarize(proportion_hits = mean(hit))
+p_hits
+
+# ex3
+# The `cis` data have already been loaded for you
+add <- results_us_election_2016 %>% mutate(actual_spread = clinton/100 - trump/100) %>% select(state, actual_spread)
+cis <- cis %>% mutate(state = as.character(state)) %>% left_join(add, by = "state")
+names(cis)
+
+# Create an object called `p_hits` that summarizes the proportion of hits for each pollster that has more than 5 polls.
+p_hits <- cis %>% mutate(hit = actual_spread >= lower & actual_spread <= upper) %>% group_by(pollster, grade) %>% filter(n() >= 5) %>% summarize(proportion_hits = mean(hit), n = n()) %>% arrange(desc(proportion_hits))
+p_hits
+
+# ex4
+# The `cis` data have already been loaded for you
+add <- results_us_election_2016 %>% mutate(actual_spread = clinton/100 - trump/100) %>% select(state, actual_spread)
+ci_data <- cis %>% mutate(state = as.character(state)) %>% left_join(add, by = "state")
+
+# Create an object called `p_hits` that summarizes the proportion of hits for each state that has more than 5 polls.
+p_hits <- ci_data %>% mutate(hit = actual_spread >= lower & actual_spread <= upper) %>% group_by(state) %>% filter(n() >= 5) %>% summarize(proportion_hits = mean(hit), n = n()) %>% arrange(desc(proportion_hits))
+p_hits
+
+# ex5
+# The `p_hits` data have already been loaded for you. Use the `head` function to examine it.
+head(p_hits)
+
+# Make a barplot of the proportion of hits for each state
+p_hits %>% ggplot(aes(state, proportion_hits)) + geom_bar(stat="identity") + coord_flip()
+
+# ex6
+# The `cis` data have already been loaded. Examine it using the `head` function.
+head(cis)
+
+# Create an object called `errors` that calculates the difference between the predicted and actual spread and indicates if the correct winner was predicted
+errors <- cis %>% mutate(error = spread - actual_spread, hit = spread * actual_spread > 0)
+
+# Examine the last 6 rows of `errors`
+tail(errors)
+
+# ex7
+# Create an object called `errors` that calculates the difference between the predicted and actual spread and indicates if the correct winner was predicted
+errors <- cis %>% mutate(error = spread - actual_spread, hit = sign(spread) == sign(actual_spread))
+
+# Create an object called `p_hits` that summarizes the proportion of hits for each state that has more than 5 polls
+p_hits <- errors %>% group_by(state) %>% filter(n() >= 5) %>% summarize(proportion_hits = mean(hit), n = n()) %>% arrange(desc(proportion_hits))
+tail(p_hits)
+
+# Make a barplot of the proportion of hits for each state
+p_hits %>% ggplot(aes(state, proportion_hits)) + geom_bar(stat="identity") + coord_flip()
+
+# ex8
+# The `errors` data have already been loaded. Examine them using the `head` function.
+head(errors)
+
+# Generate a histogram of the error
+hist(errors$error)
+
+# Calculate the median of the errors. Print this value to the console.
+median(errors$error)
+
+# ex9
+# did not use reorder, use arrange instead. because I can't use reorder
+# The `errors` data have already been loaded. Examine them using the `head` function.
+head(errors)
+
+# Create a boxplot showing the errors by state for polls with grades B+ or higher
+errors %>% filter(grade %in% c("A+", "A", "A-", "B+")) %>% arrange(desc(error)) %>% ggplot(aes(state, error)) + geom_boxplot() + geom_point()
+
+# ex10
+# The `errors` data have already been loaded. Examine them using the `head` function.
+head(errors)
+
+# Create a boxplot showing the errors by state for states with at least 5 polls with grades B+ or higher
+errors %>% filter(grade %in% c("A+", "A", "A-", "B+")) %>% group_by(state) %>% filter(n() >= 5) %>% arrange(desc(error)) %>% ggplot(aes(state, error)) + geom_boxplot() + geom_point()
+
+# 6.5 The t-Distribution
+# for values smaller than 30, we need to be cautious about using the CLT
+# only if the data follow a normal distribution
+# Z = (X_hat - d) / (sigma / sqrt(N))
+# actually, we don't know sigma, so use this
+# Z = (X_hat - d) / (s*sqrt(N))
+z <- qt(0.975, nrow(one_poll_per_pollster) - 1)
+one_poll_per_pollster %>% summarize(avg = mean(spread), moe = z*sd(spread)/sqrt(length(spread))) %>% mutate(start = avg - moe, end = avg + moe)
+qt(0.975, 14)
+qnorm(0.975)
+
+# T-distribute exercises
+# ex1
+# Calculate the probability of seeing t-distributed random variables being more than 2 in absolute value when 'df = 3'.
+1 - pt(2, 3) + pt(-2, 3)
+
+# ex2
+# Generate a vector 'df' that contains a sequence of numbers from 3 to 50
+df <- seq(3,50)
+
+# Make a function called 'pt_func' that calculates the probability that a value is more than |2| for any degrees of freedom 
+pt_func <- function(n) {
+  1 - pt(2, n) + pt(-2, n)
+}
+
+# Generate a vector 'probs' that uses the `pt_func` function to calculate the probabilities
+probs <- sapply(df, pt_func)
+
+# Plot 'df' on the x-axis and 'probs' on the y-axis
+plot(df, probs)
+
+# ex3
+# Load the neccessary libraries and data
+library(dslabs)
+library(dplyr)
+data(heights)
+
+# Use the sample code to generate 'x', a vector of male heights
+x <- heights %>% filter(sex == "Male") %>%
+  .$height
+
+# Create variables for the mean height 'mu', the sample size 'N', and the number of times the simulation should run 'B'
+mu <- mean(x)
+N <- 15
+B <- 10000
+
+# Use the `set.seed` function to make sure your answer matches the expected result after random sampling
+set.seed(1)
+
+# Generate a logical vector 'res' that contains the results of the simulations
+res <- replicate(B, {
+  s <- sample(x, N, replace = TRUE)
+  interval <- c(qnorm(0.025, mean(s), sd(s)/sqrt(N)), qnorm(0.975, mean(s), sd(s)/sqrt(N)))
+  between(mu, interval[1], interval[2])
+})
+
+# Calculate the proportion of times the simulation produced values within the 95% confidence interval. Print this value to the console.
+mean(res)
+
+# ex4
+# The vector of filtered heights 'x' has already been loaded for you. Calculate the mean.
+mu <- mean(x)
+
+# Use the same sampling parameters as in the previous exercise.
+set.seed(1)
+N <- 15
+B <- 10000
+
+# Generate a logical vector 'res' that contains the results of the simulations using the t-distribution
+res <- replicate(B, {
+  s <- sample(x, N, replace = TRUE)
+  interval <- c(mean(s) - qt(0.975, N - 1) * sd(s) / sqrt(N), mean(s) + qt(0.975, N - 1) * sd(s) / sqrt(N))
+  between(mu, interval[1], interval[2])
+})
+
+# Calculate the proportion of times the simulation produced values within the 95% confidence interval. Print this value to the console.
+mean(res)
+

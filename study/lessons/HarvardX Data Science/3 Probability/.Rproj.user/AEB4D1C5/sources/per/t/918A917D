@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1530315216876.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "592823429",
+    "id" : "918A917D",
+    "lastKnownWriteTime" : 1530320072,
+    "last_content_update" : 1530320070453,
+    "path" : "O:/study/lessons/HarvardX Data Science/3 Probability/Section2-Continuous Probability.R",
+    "project_path" : "Section2-Continuous Probability.R",
+    "properties" : {
+        "cursorPosition" : "94,116",
+        "scrollLine" : "78",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

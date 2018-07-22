@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1530320081746.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3233133837",
+    "id" : "286B23C8",
+    "lastKnownWriteTime" : 1530435972,
+    "last_content_update" : 1530435970447,
+    "path" : "O:/study/lessons/HarvardX Data Science/3 Probability/Section3-Random Variables-Sampling Models-Central Limit Theorem.R",
+    "project_path" : "Section3-Random Variables-Sampling Models-Central Limit Theorem.R",
+    "properties" : {
+        "cursorPosition" : "173,19",
+        "scrollLine" : "158",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

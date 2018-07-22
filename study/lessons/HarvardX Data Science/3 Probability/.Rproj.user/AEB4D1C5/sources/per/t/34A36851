@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1529964213823.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3014895431",
+    "id" : "34A36851",
+    "lastKnownWriteTime" : 1530315066,
+    "last_content_update" : 1530315065798,
+    "path" : "O:/study/lessons/HarvardX Data Science/3 Probability/1-discreteProbability.R",
+    "project_path" : "1-discreteProbability.R",
+    "properties" : {
+        "cursorPosition" : "298,0",
+        "scrollLine" : "0",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

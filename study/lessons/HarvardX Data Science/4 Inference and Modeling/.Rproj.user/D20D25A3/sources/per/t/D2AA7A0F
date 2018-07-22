@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1530523723226.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1885708031",
+    "id" : "D2AA7A0F",
+    "lastKnownWriteTime" : 1530523750,
+    "last_content_update" : 1530523749682,
+    "path" : "D:/study/lessons/HarvardX Data Science/4 Inference and Modeling/Introdution.R",
+    "project_path" : "Introdution.R",
+    "properties" : {
+        "cursorPosition" : "0,1",
+        "scrollLine" : "0",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

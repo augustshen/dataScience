@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1530740008313.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "4025058547",
+    "id" : "9E0FA3D1",
+    "lastKnownWriteTime" : 1530795686,
+    "last_content_update" : 1530795685801,
+    "path" : "O:/study/lessons/HarvardX Data Science/4 Inference and Modeling/Section2.R",
+    "project_path" : "Section2.R",
+    "properties" : {
+        "cursorPosition" : "197,92",
+        "scrollLine" : "0",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
